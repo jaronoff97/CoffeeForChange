@@ -12,17 +12,18 @@ import Firebase
 
 class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDelegate, UITableViewDataSource {
     var user: User!
-    var total: Double = 0.0
     var items: [Menu] = []
     var addedItems: [Menu] = []
+    var total: Double = 0.0
+    let firebase_ref = Firebase(url:"https://coffeeforchange.firebaseio.com")
     
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var moneyLabel: UILabel!
     
     
-    @IBOutlet var menuTable: UITableView!
+    @IBOutlet weak var menuTable: UITableView!
     
-    @IBOutlet var addedItemTable: UITableView!
+    @IBOutlet weak var addedItemTable: UITableView!
     
     @IBOutlet var totalAmount: UILabel!
    
@@ -32,22 +33,25 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
         super.viewDidLoad()
         nameLabel.text = user.full_name!
         moneyLabel.text = "\(user.first_name!) has $\(user.money!) in their account"
-        let firebase_users = Firebase(url:"https://coffeeforchange.firebaseio.com/menu")
-        configureData(firebase_users)
+        let firebase_menu = firebase_ref.childByAppendingPath("/menu")
+        configureData(firebase_menu)
+        menuTable.delegate = self
+        menuTable.dataSource = self
+        addedItemTable.delegate = self
+        addedItemTable.dataSource = self
         
-        self.menuTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "itemCell")
-        self.addedItemTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "addedItemCell")
+        self.menuTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.addedItemTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+
         // Do any additional setup after loading the view, typically from a nib.
     }
     func configureData(firebase: Firebase) {
         // Attach a closure to read the data at our posts reference
         firebase.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            //print(snapshot)
             let enumerator = snapshot.children
             while let rest = enumerator.nextObject() as? FDataSnapshot {
                 let secondEnum = rest.children
                 while let nextLevel = secondEnum.nextObject() as? FDataSnapshot{
-                    print(nextLevel)
                     let tempItem: Menu = Menu(price: ((nextLevel.value["price"] as! NSNumber).doubleValue as Double?)!, name: nextLevel.value["name"] as! String, id: nextLevel.value["id"] as! String)
                     self.items.append(tempItem)
                     self.menuTable.reloadData()
@@ -64,13 +68,14 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
         // Dispose of any resources that can be recreated.
     }
     
-    /*func calculateTotal(){
-        let coffeeInt = Double(coffeeAmount.text!)!
-        let latteInt = Double(latteAmount.text!)!
-        let teaInt = Double(teaAmount.text!)!
-        total = (coffeeInt*1.5)+(latteInt*2)+(teaInt*1)
+    func calculateTotal(){
+        total = 0.0
+        addedItems.forEach( { (let menuItem: Menu) -> () in
+                total+=menuItem.price
+            })
+
         totalAmount.text="Total: \(String(total))"
-    }*/
+    }
     func openSignatureController(){
         let alertController = UIAlertController(title: "Pay", message: "How do you want to pay?", preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "IA", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
@@ -83,7 +88,7 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
             })
         }))
         alertController.addAction(UIAlertAction(title: "Cash", style: UIAlertActionStyle.Default,handler: { (action:UIAlertAction) -> Void in
-            
+            self.finishPay()
         }))
         alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
             
@@ -102,7 +107,7 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
                 self.openSignatureController()
             }))
             alertController.addAction(UIAlertAction(title: "Cash", style: UIAlertActionStyle.Default,handler: { (action:UIAlertAction) -> Void in
-                
+                self.finishPay()
             }))
             alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
 
@@ -118,29 +123,82 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
     func epSignature(_: EPSignatureViewController, didCancel error : NSError) {
         print("User canceled")
     }
-    
+    func finishPay(){
+        let firebase_orders = firebase_ref.childByAppendingPath("/orders")
+        addedItems.forEach({ (let menuItem: Menu) -> () in
+            let tempOrder = ["menu_item": menuItem.name, "user":user.full_name!, "description":"", "id":NSUUID().UUIDString]
+            let order_ref = firebase_orders.childByAppendingPath(tempOrder["id"])
+            order_ref.setValue(tempOrder)
+        })
+        self.navigationController?.popToRootViewControllerAnimated(true)
+
+    }
     func epSignature(_: EPSignatureViewController, didSigned signatureImage : UIImage, boundingRect: CGRect) {
         signatureImageView.image = signatureImage
-        let firebase_ref = Firebase(url:"https://coffeeforchange.firebaseio.com/users")
-        let usersRef = firebase_ref.childByAppendingPath("\(user.user_id!)")
+        let firebase_users = firebase_ref.childByAppendingPath("/users")
+        let usersRef = firebase_users.childByAppendingPath("\(user.user_id!)")
         let final_amount =  user.money!-total
         let updateData = ["money_left":final_amount,"total_money":user.total_money!]
         usersRef.updateChildValues(updateData)
-        self.navigationController?.popToRootViewControllerAnimated(true)
+
+        finishPay()
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.items.count;
+        if(tableView == menuTable){
+            return self.items.count;
+        }
+        else{
+            return self.addedItems.count;
+        }
+        
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let menuCell:UITableViewCell = self.menuTable.dequeueReusableCellWithIdentifier("itemCell")! as UITableViewCell
-        
-        menuCell.textLabel?.text = self.items[indexPath.row].name
-        
-        return menuCell
+        if(tableView == menuTable){
+            let menuCell:MenuTableCell = self.menuTable.dequeueReusableCellWithIdentifier("itemCell") as! MenuTableCell
+            
+            menuCell.nameLabel?.text = self.items[indexPath.row].name
+            menuCell.priceLabel?.text = String(self.items[indexPath.row].price)
+            
+            return menuCell
+        }
+        else{
+            let menuCell:MenuTableCell = self.addedItemTable.dequeueReusableCellWithIdentifier("addedItemCell") as! MenuTableCell
+            
+            
+            menuCell.nameLabel?.text = self.addedItems[indexPath.row].name
+            menuCell.priceLabel?.text = String(self.addedItems[indexPath.row].price)
+            
+            return menuCell
+        }
+       
+    }
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if(tableView == menuTable){
+            return false
+        }
+        else{
+            return true
+        }
     }
     
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (tableView == addedItemTable && editingStyle == UITableViewCellEditingStyle.Delete) {
+            addedItems.removeAtIndex(indexPath.row)
+            addedItemTable.reloadData()
+            calculateTotal()
+        }
+    }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print("You selected cell #\(indexPath.row)!")
+
+        if(tableView == menuTable){
+            addedItems.append(items[indexPath.row])
+            calculateTotal()
+            menuTable.deselectRowAtIndexPath(indexPath, animated: true)
+            addedItemTable.reloadData()
+        }
+        else{
+            addedItemTable.deselectRowAtIndexPath(indexPath, animated: true)
+        }
     }
 
 

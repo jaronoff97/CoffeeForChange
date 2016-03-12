@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		892096851C93C56B0034B13D /* MenuTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892096841C93C56B0034B13D /* MenuTableCell.swift */; };
+		892096871C93DBBA0034B13D /* OrderTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892096861C93DBBA0034B13D /* OrderTableCell.swift */; };
 		8926888C1C886681009B4B93 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8926888B1C886681009B4B93 /* UserViewController.swift */; };
 		89B7CE401C8901B200E12131 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B7CE3F1C8901B200E12131 /* Menu.swift */; };
 		89E18ED11C87A15200916C5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18ED01C87A15200916C5D /* AppDelegate.swift */; };
@@ -42,6 +44,8 @@
 
 /* Begin PBXFileReference section */
 		1B6F545A829F0D47FA57266E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		892096841C93C56B0034B13D /* MenuTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableCell.swift; sourceTree = "<group>"; };
+		892096861C93DBBA0034B13D /* OrderTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderTableCell.swift; sourceTree = "<group>"; };
 		8926888B1C886681009B4B93 /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		89B7CE3F1C8901B200E12131 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		89E18ECD1C87A15200916C5D /* CoffeeForChange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeForChange.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +134,8 @@
 				89E18F001C87A81500916C5D /* User.swift */,
 				89E18ED41C87A15200916C5D /* SecondViewController.swift */,
 				89E18ED61C87A15200916C5D /* Main.storyboard */,
+				892096861C93DBBA0034B13D /* OrderTableCell.swift */,
+				892096841C93C56B0034B13D /* MenuTableCell.swift */,
 				8926888B1C886681009B4B93 /* UserViewController.swift */,
 				89E18ED91C87A15200916C5D /* Assets.xcassets */,
 				89E326081C932CA400007C05 /* CurrentOrdersController.swift */,
@@ -350,6 +356,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				89B7CE401C8901B200E12131 /* Menu.swift in Sources */,
+				892096871C93DBBA0034B13D /* OrderTableCell.swift in Sources */,
+				892096851C93C56B0034B13D /* MenuTableCell.swift in Sources */,
 				89E326091C932CA400007C05 /* CurrentOrdersController.swift in Sources */,
 				89E3260B1C935B0D00007C05 /* Order.swift in Sources */,
 				89E18F011C87A81500916C5D /* User.swift in Sources */,

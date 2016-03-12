@@ -12,6 +12,8 @@ import Firebase
 class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
     @IBOutlet var tableView: UITableView!
     var searchController: UISearchController!
+    
+    let firebase_users = Firebase(url:"https://coffeeforchange.firebaseio.com/users")
     var users = [User]()
     var filteredUsers = [User]()
     var shouldShowSearchResults = false
@@ -19,15 +21,14 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        let firebase_users = Firebase(url:"https://coffeeforchange.firebaseio.com/users")
         configureData(firebase_users)
         configureSearchController()        // Get the data on a post that has changed
         firebase_users.observeEventType(.ChildChanged, withBlock: { snapshot in
             let newUser = self.makeUserFromData(snapshot)
             self.users.removeAtIndex(self.indexOfUser(newUser))
             self.users.append(newUser)
+            self.users.sortInPlace({$0.last_name < $1.last_name})
             self.tableView.reloadData()
         })
     }
@@ -126,9 +127,6 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Reload the tableview.
         tableView.reloadData()
     }
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?){
         
         if (segue.identifier == "detailTableSegue") {
@@ -140,6 +138,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
             // your new view controller should have property that will store passed value
             viewController.user = userToPass
             viewController.navigationItem.title = "\(userToPass.full_name!)"
+            searchController.active = false
         }
         
     }
@@ -170,6 +169,10 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         else{
             userToPass = users[indexPath.row]
         }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+
         self.performSegueWithIdentifier("detailTableSegue", sender: self)
     }
+    
+    
 }
