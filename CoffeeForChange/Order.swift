@@ -12,4 +12,5 @@ struct Order {
     var menu_item: String
     var description_of_item: String
     var user: String
+    var id: String
 }
