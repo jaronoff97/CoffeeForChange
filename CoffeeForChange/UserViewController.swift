@@ -17,6 +17,13 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
     var total: Double = 0.0
     let firebase_ref = Firebase(url:"https://coffeeforchange.firebaseio.com")
     
+    enum PayMethod {
+        case Cash
+        case IA
+    }
+    
+    var current_method: PayMethod = .IA
+    
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var moneyLabel: UILabel!
     
@@ -33,6 +40,14 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
         super.viewDidLoad()
         nameLabel.text = user.full_name!
         moneyLabel.text = "\(user.first_name!) has $\(user.money!) in their account"
+        firebase_ref.authWithCustomToken("FzyJevPNtUWU2rEO2P9ih7dYLLFXc6NlFa014TaN", withCompletionBlock: {error, authData in
+            if error != nil {
+                print("login failed! \(error)")
+            }
+            else {
+                print("Login succeeded! \(authData)")
+            }
+        })
         let firebase_menu = firebase_ref.childByAppendingPath("/menu")
         configureData(firebase_menu)
         menuTable.delegate = self
@@ -79,6 +94,7 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
     func openSignatureController(){
         let alertController = UIAlertController(title: "Pay", message: "How do you want to pay?", preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "IA", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
+            self.current_method = .IA
             let signatureVC = EPSignatureViewController(signatureDelegate: self, showsDate: true, showsSaveSignatureOption: true)
             signatureVC.subtitleText = "I agree to the terms and conditions"
             signatureVC.title = self.user.full_name!
@@ -88,6 +104,7 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
             })
         }))
         alertController.addAction(UIAlertAction(title: "Cash", style: UIAlertActionStyle.Default,handler: { (action:UIAlertAction) -> Void in
+            self.current_method = .Cash
             self.finishPay()
         }))
         alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
@@ -107,6 +124,7 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
                 self.openSignatureController()
             }))
             alertController.addAction(UIAlertAction(title: "Cash", style: UIAlertActionStyle.Default,handler: { (action:UIAlertAction) -> Void in
+                self.current_method = .Cash
                 self.finishPay()
             }))
             alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
@@ -126,7 +144,11 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
     func finishPay(){
         let firebase_orders = firebase_ref.childByAppendingPath("/orders")
         addedItems.forEach({ (let menuItem: Menu) -> () in
-            let tempOrder = ["menu_item": menuItem.name, "user":user.full_name!, "description":"", "id":NSUUID().UUIDString]
+            let dateFormatter:NSDateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
+            let now = dateFormatter.stringFromDate(NSDate())
+            
+            let tempOrder = ["menu_item": menuItem.name, "user":user.full_name!, "description":"", "id":NSUUID().UUIDString, "timestamp":now, "price":String(menuItem.price), "userid":user.user_id!, "pay_with_IA":String(current_method.hashValue != 0)]
             let order_ref = firebase_orders.childByAppendingPath(tempOrder["id"])
             order_ref.setValue(tempOrder)
         })

@@ -22,6 +22,14 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        firebase_users.authWithCustomToken("FzyJevPNtUWU2rEO2P9ih7dYLLFXc6NlFa014TaN", withCompletionBlock: {error, authData in
+            if error != nil {
+                print("login failed! \(error)")
+            }
+            else {
+                print("Login succeeded! \(authData)")
+            }
+        })
         configureData(firebase_users)
         configureSearchController()        // Get the data on a post that has changed
         firebase_users.observeEventType(.ChildChanged, withBlock: { snapshot in
@@ -49,7 +57,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func indexOfUser(tempUser: User) -> Int {
         var toReturn = -1
         
-        for(var i=0; i<users.count;i++){
+        for i in 0 ..< users.count{
             if(users[i].user_id == tempUser.user_id){
                 toReturn = i
             }

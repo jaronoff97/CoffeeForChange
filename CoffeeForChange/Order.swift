@@ -13,4 +13,8 @@ struct Order {
     var description_of_item: String
     var user: String
     var id: String
+    var timestamp: NSDate
+    var price: Double
+    var userid: String
+    var pay_with_IA: Bool
 }
