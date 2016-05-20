@@ -86,8 +86,10 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/EPSignature.framework"
   install_framework "Pods/Firebase.framework"
+  install_framework "Pods/MGSwipeTableCell.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/EPSignature.framework"
   install_framework "Pods/Firebase.framework"
+  install_framework "Pods/MGSwipeTableCell.framework"
 fi

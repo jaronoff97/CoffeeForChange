@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Order {
     var menu_item: String
@@ -17,4 +18,5 @@ struct Order {
     var price: Double
     var userid: String
     var pay_with_IA: Bool
+    var signature: UIImage?
 }

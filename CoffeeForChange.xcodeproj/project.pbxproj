@@ -245,6 +245,11 @@
 					89E18ECC1C87A15200916C5D = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = YQC4GRW9NL;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					89E18EE21C87A15200916C5D = {
 						CreatedOnToolsVersion = 7.2.1;

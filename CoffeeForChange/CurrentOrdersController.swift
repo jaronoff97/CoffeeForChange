@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import MGSwipeTableCell
 
 extension String {
     func toBool() -> Bool? {
@@ -62,6 +63,10 @@ class CurrentOrdersController: UIViewController, UITableViewDelegate, UITableVie
                 let dateFormatter = NSDateFormatter()
                 dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
                 let date = dateFormatter.dateFromString(rest.value["timestamp"] as! String)
+                var sig = ""
+                if let signature:String = rest.value["signature"] as? String{
+                    sig=signature
+                }
                 let tempItem: Order = Order(menu_item: rest.value["menu_item"] as! String,
                     description_of_item: rest.value["description"] as! String,
                     user:rest.value["user"] as! String,
@@ -69,12 +74,11 @@ class CurrentOrdersController: UIViewController, UITableViewDelegate, UITableVie
                     timestamp: date!,
                     price: Double(rest.value["price"] as! String)!,
                     userid: rest.value["userid"] as! String,
-                    pay_with_IA: (rest.value["pay_with_IA"] as! String).toBool()!)
-                
-                    self.items.append(tempItem)
-                
-                
-                    self.tableView.reloadData()
+                    pay_with_IA: (rest.value["pay_with_IA"] as! String).toBool()!,
+                    signature: self.makeImageFromString(sig)
+                )
+                self.items.append(tempItem)
+                self.tableView.reloadData()
                 
             }
             self.items.sortInPlace({ $0.timestamp.compare($1.timestamp) == NSComparisonResult.OrderedDescending })
@@ -91,80 +95,97 @@ class CurrentOrdersController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
-    /*func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let more = UITableViewRowAction(style: .Normal, title: "More") { action, index in
-            print("more button tapped")
-        }
-        more.backgroundColor = UIColor.lightGrayColor()
-        
-        let favorite = UITableViewRowAction(style: .Normal, title: "Favorite") { action, index in
-            print("favorite button tapped")
-        }
-        favorite.backgroundColor = UIColor.orangeColor()
-        
-        let share = UITableViewRowAction(style: .Normal, title: "Share") { action, index in
-            print("share button tapped")
-        }
-        share.backgroundColor = UIColor.blueColor()
-        
-        return [share, favorite, more]
-    }*/
     func colorForIndex(index: Int) -> UIColor {
         let itemCount = items.count - 1
         let val = (CGFloat(index) / CGFloat(itemCount)) * 0.6
         return UIColor(red: 1.0, green: val, blue: 0.0, alpha: 1.0)
     }
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if (editingStyle == UITableViewCellEditingStyle.Delete) {
-            let alertController = UIAlertController(title: "Warning", message: "Do you want to cancel your order", preferredStyle: UIAlertControllerStyle.Alert)
-            alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
-                let firebase_to_remove = self.firebase_orders.childByAppendingPath(self.items[indexPath.row].id)
-                firebase_to_remove.removeValue()
-                if(self.items[indexPath.row].pay_with_IA==true){
-                    let refund_user = Firebase(url: "https://coffeeforchange.firebaseio.com/users/\(self.items[indexPath.row].userid)")
-                    print(refund_user)
-                    refund_user.observeSingleEventOfType(.Value, withBlock: { snapshot in
-                        print("----------------")
-                        print(snapshot.value)
-                        let new_money = (snapshot.value["money_left"] as! Double)+self.items[indexPath.row].price
-                        refund_user.updateChildValues(["money_left":new_money])
-                        self.items.removeAtIndex(indexPath.row)
-                        tableView.reloadData()
-                        }, withCancelBlock: { error in
-                            print(error.description)
-                    })
-                }
-
-            }))
-            alertController.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
-                let firebase_to_remove = self.firebase_orders.childByAppendingPath(self.items[indexPath.row].id)
-                firebase_to_remove.removeValue()
-                self.items.removeAtIndex(indexPath.row)
-                tableView.reloadData()
-            }))
-            self.presentViewController(alertController, animated: true, completion: nil)
-
-                    }
+    func removeFromFirebase(index: Int){
+        let firebase_to_remove = self.firebase_orders.childByAppendingPath(self.items[index].id)
+        firebase_to_remove.removeValue()
+        self.items.removeAtIndex(index)
+        tableView.reloadData()
+    }
+    func refund(index: Int){
+        let refund_user = Firebase(url: "https://coffeeforchange.firebaseio.com/users/\(self.items[index].userid)")
+        print(refund_user)
+        refund_user.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            let new_money = (snapshot.value["money_left"] as! Double)+self.items[index].price
+            refund_user.updateChildValues(["money_left":new_money])
+            }, withCancelBlock: { error in
+                print(error.description)
+        })
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.items.count;
     }
-    
+    func openCancelDialog(index: Int){
+        let alertController = UIAlertController(title: "Warning", message: "Do you want to cancel your order", preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
+            if(self.items[index].pay_with_IA==true){
+                self.refund(index)
+            }
+            self.removeFromFirebase(index)
+        }))
+        alertController.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
+            
+        }))
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    func showSignature(image: UIImage){
+        let alertController = UIAlertController(title: "Signature", message: "User's Signature", preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "title", style: .Default, handler: nil)
+        action.setValue(image, forKey: "image")
+        alertController.addAction(action)
+        alertController.addAction(UIAlertAction(title: "Done", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
+            
+        }))
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell:OrderTableCell = self.tableView.dequeueReusableCellWithIdentifier("orderCell") as! OrderTableCell
         cell.userLabel?.text = items[indexPath.row].user
         cell.nameLabel?.text = items[indexPath.row].menu_item
+        cell.leftButtons = [MGSwipeButton(title: "Done", icon: UIImage(named:"check.png"), backgroundColor: UIColor.greenColor(), callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            self.removeFromFirebase(indexPath.row)
+            return true
+        })]
+        cell.rightButtons = [MGSwipeButton(title: "Delete", icon: UIImage(named:"check.png"), backgroundColor: UIColor.redColor(), callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            self.openCancelDialog(indexPath.row)
+            return true
+        })]
+        cell.leftExpansion.fillOnTrigger = true
+        cell.leftExpansion.buttonIndex = 0
+        cell.leftSwipeSettings.transition = MGSwipeTransition.Drag
+        
+        cell.rightExpansion.fillOnTrigger = true
+        cell.rightExpansion.buttonIndex = 0
+        cell.rightSwipeSettings.transition = MGSwipeTransition.Drag
+        
         if(colors_on==true){
                 cell.backgroundColor = colorForIndex(indexPath.row)
         }
         else{
-            cell.backgroundColor = UIColor.clearColor()oc
+            cell.backgroundColor = UIColor.clearColor()
         }
         
         return cell
     }
-    
+    func makeImageFromString(imageSnap: String) -> UIImage?{
+        if(imageSnap==""){
+            return nil
+        }else{
+            
+            let base64String = imageSnap
+            let imageData = NSData(base64EncodedString: base64String, options: NSDataBase64DecodingOptions.IgnoreUnknownCharacters)
+            let decodedImage = UIImage(data:imageData!)
+            return decodedImage
+        }
+    }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        //showSignature(self.items[indexPath.row].signature)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     @IBAction func colorButton(sender: AnyObject) {

@@ -8,8 +8,9 @@
 
 import Foundation
 import UIKit
+import MGSwipeTableCell
 
-class OrderTableCell: UITableViewCell{
+class OrderTableCell: MGSwipeTableCell{
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var userLabel: UILabel!
     

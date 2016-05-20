@@ -1,13 +1,16 @@
 PODS:
   - EPSignature (1.0.1)
   - Firebase (2.5.1)
+  - MGSwipeTableCell (1.5.4)
 
 DEPENDENCIES:
   - EPSignature
   - Firebase (>= 2.5.0)
+  - MGSwipeTableCell
 
 SPEC CHECKSUMS:
   EPSignature: 3bb269db08c47041bcc92151688600ab835b5a80
   Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085
+  MGSwipeTableCell: cffd3378af74eb991911f132c5f3911261fda860
 
 COCOAPODS: 0.39.0

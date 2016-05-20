@@ -105,7 +105,7 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
         }))
         alertController.addAction(UIAlertAction(title: "Cash", style: UIAlertActionStyle.Default,handler: { (action:UIAlertAction) -> Void in
             self.current_method = .Cash
-            self.finishPay()
+            self.finishPay(nil)
         }))
         alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
             
@@ -119,13 +119,20 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
         if(total>user.money!){
             let alertController = UIAlertController(title: "Warning", message: "The order you have submitted is greater than the funds in your account", preferredStyle: UIAlertControllerStyle.Alert)
             alertController.addAction(UIAlertAction(title: "Add funds ($10) to your account", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
-                self.user.total_money!+=10.0
-                self.user.money!+=10.0
+                if(self.user.total_money<10){
+                    self.user.total_money!+=10.0
+                    self.user.money!+=10.0
+                }
+                else {
+                    self.user.total_money!+=self.total
+                    self.user.money!+=self.total
+                    
+                }
                 self.openSignatureController()
             }))
             alertController.addAction(UIAlertAction(title: "Cash", style: UIAlertActionStyle.Default,handler: { (action:UIAlertAction) -> Void in
                 self.current_method = .Cash
-                self.finishPay()
+                self.finishPay(nil)
             }))
             alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
 
@@ -141,16 +148,30 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
     func epSignature(_: EPSignatureViewController, didCancel error : NSError) {
         print("User canceled")
     }
-    func finishPay(){
+    func finishPay(sig: UIImage?){
         let firebase_orders = firebase_ref.childByAppendingPath("/orders")
+        let firebase_user = firebase_ref.childByAppendingPath("/users/\(user.user_id!)")
         addedItems.forEach({ (let menuItem: Menu) -> () in
             let dateFormatter:NSDateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
             let now = dateFormatter.stringFromDate(NSDate())
             
-            let tempOrder = ["menu_item": menuItem.name, "user":user.full_name!, "description":"", "id":NSUUID().UUIDString, "timestamp":now, "price":String(menuItem.price), "userid":user.user_id!, "pay_with_IA":String(current_method.hashValue != 0)]
+            var tempOrder = ["menu_item": menuItem.name, "user":user.full_name!, "description":"", "id":NSUUID().UUIDString, "timestamp":now, "price":String(menuItem.price), "userid":user.user_id!, "pay_with_IA":String(current_method.hashValue != 0)]
+            
+            if let final_image = sig{
+                let imageData: NSData = UIImageJPEGRepresentation(final_image, 0.1)!
+                let base64String = imageData.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+                tempOrder.updateValue(base64String as String, forKey: "signature")
+            }
+            else{
+                tempOrder.updateValue("", forKey: "signature")
+            }
             let order_ref = firebase_orders.childByAppendingPath(tempOrder["id"])
             order_ref.setValue(tempOrder)
+            
+            let firebase_user_orders = firebase_user.childByAppendingPath("/all_orders/\(tempOrder["id"]!)")
+            firebase_user_orders.updateChildValues(tempOrder)
+            
         })
         self.navigationController?.popToRootViewControllerAnimated(true)
 
@@ -163,7 +184,7 @@ class UserViewController: UIViewController, EPSignatureDelegate, UITableViewDele
         let updateData = ["money_left":final_amount,"total_money":user.total_money!]
         usersRef.updateChildValues(updateData)
 
-        finishPay()
+        finishPay(signatureImage)
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(tableView == menuTable){
