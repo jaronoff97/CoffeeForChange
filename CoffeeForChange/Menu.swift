@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Menu {
+struct Menu: FirebaseItem {
     var price: Double
     var name: String
     var id: String

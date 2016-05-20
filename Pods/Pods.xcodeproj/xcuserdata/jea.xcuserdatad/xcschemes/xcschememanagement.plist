@@ -9,17 +9,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Firebase.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>MGSwipeTableCell.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods.xcscheme</key>
+		<key>Pods-CoffeeForChange.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-CoffeeForChangeTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-CoffeeForChangeUITests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,17 +37,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3EDEA02D78152C9CE4D179552D35709D</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>4E1263BFF45F6446CF3DE29AE234C893</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B7AC9326D819482593FE118E915409D7</key>
+		<key>72CB681C2B9013633AAA35E17E53F0E6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B5F6AF3CB3F1490582A53675E689615E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EAEA27553B15762DDFB585F6A74FFBA5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
