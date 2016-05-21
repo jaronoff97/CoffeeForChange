@@ -9,65 +9,60 @@
 import Foundation
 import Firebase
 
-class UsersInstance: ConfigureData, FirebaseItemDelegate {
-    var items: [FirebaseItem] = []
-    static let sharedMenu = MenuInstance()
-    var firebaseRef: FIRDatabaseReference{
-        get {
-            return DataInstance.sharedInstance.userRef
+class UsersInstance: FirebaseItemDelegate {
+    var items: [FirebaseItem] = [] {
+        didSet {
+            self.reloadDelegateData()
         }
     }
+    var instanceType: Instance {
+        return .User
+    }
+    private static let sharedInstance = MenuInstance()
     var tableDelegate: FirebaseTableDelegate?
 
     init(){
-        firebaseRef.observeEventType(.ChildChanged, withBlock: { snapshot in
-            let newUser = self.makeUserFromData(snapshot)
-            self.items[self.items.indexOf({$0.id == newUser.id})!] = newUser
-            self.reloadDelegateData()
-        })
+        
     }
-    func reloadDelegateData() {
-        if let tableDelegate = self.tableDelegate{
-            tableDelegate.reloadData()
-        }
-    }
-    func config(completion:()->Void){
-        firebaseRef.queryOrderedByChild("last").observeSingleEventOfType(.Value, withBlock: { snapshot in
+}
+extension UsersInstance: ConfigureData{
+    func config(database: FIRDatabaseReference,completion:()->Void){
+        database.queryOrderedByChild("last").observeSingleEventOfType(.Value, withBlock: { snapshot in
             let enumerator = snapshot.children
             while let rest = enumerator.nextObject() as? FIRDataSnapshot {
-                self.items.append(self.makeUserFromData(rest))
+                self.items.append(self.itemFactory(rest))
             }
             completion()
             
             }, withCancelBlock: { error in
                 print(error.description)
         })
+        database.observeEventType(.ChildChanged, withBlock: { snapshot in
+            let newUser = self.itemFactory(snapshot)
+            self.items[self.items.indexOf({$0.id == newUser.id})!] = newUser
+        })
     }
-    func makeUserFromData(rest: FIRDataSnapshot) -> User {
-        let tempUser: User = User()
-        if let temp_id:String = rest.valueForKey("id") as? String{
-            tempUser.id = temp_id
+    static func getInstance() -> ConfigureData {
+        return sharedInstance
+    }
+}
+extension UsersInstance {
+    func reloadDelegateData() {
+        if var tableDelegate = self.tableDelegate{
+            tableDelegate.items = self.items
+            tableDelegate.reloadData()
         }
-        if let temp_First = rest.value!["first"] as! String?{
-            tempUser.first_name = temp_First
-        }
-        if let temp_uid = rest.value!["user_id"] as! String?{
-            tempUser.user_id = temp_uid
-        }
-        if let temp_Last = rest.value!["last"] as! String?{
-            tempUser.last_name = temp_Last
-        }
-        if let temp_money = rest.value!["money_left"] as! Double?{
-            tempUser.money = temp_money
-        }
-        if let temp_money = rest.value!["total_money"] as! Double?{
-            tempUser.total_money = temp_money
-        }
-        if let temp_year = (rest.value!["year"] as! Int?){
-            tempUser.year = temp_year
-        }
-        tempUser.full_name="\(tempUser.first_name) \(tempUser.last_name)"
+    }
+    func itemFactory(rest: FIRDataSnapshot) -> FirebaseItem{
+        let tempUser: User = User(id: (rest.value!["id"] as? String)!,
+         name: (rest.value!["first"] as! String?)!,
+         user_id: (rest.value!["user_id"] as! String?)!,
+         last_name: (rest.value!["last"] as! String?)!,
+         money: (rest.value!["money_left"] as! Double?)!,
+         total_money: (rest.value!["total_money"] as! Double?)!,
+         year: (rest.value!["year"] as! Int?)!,
+         previous_orders: [String]())
+        
         return tempUser
     }
-    
 }

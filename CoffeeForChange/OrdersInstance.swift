@@ -10,61 +10,22 @@ import Foundation
 import Firebase
 
 
-class OrdersInstance: ConfigureData, FirebaseItemDelegate {
+class OrdersInstance: FirebaseItemDelegate {
     
-    var items: [FirebaseItem] = []
-    static let sharedMenu = MenuInstance()
-    var firebaseRef: FIRDatabaseReference{
-        get {
-            return DataInstance.sharedInstance.menuRef
+    var items: [FirebaseItem] = [] {
+        didSet {
+            self.reloadDelegateData()
         }
     }
+    var instanceType: Instance {
+        return .Order
+    }
+    private static let sharedInstance = MenuInstance()
     var tableDelegate: FirebaseTableDelegate?
 
     
     init(){
         
-    }
-    func reloadDelegateData() {
-        if let tableDelegate = self.tableDelegate{
-            tableDelegate.reloadData()
-        }
-    }
-    func config(completion:()->Void){
-        firebaseRef.observeEventType(.Value, withBlock: { snapshot in
-            let enumerator = snapshot.children
-            while let rest = enumerator.nextObject() as? FIRDataSnapshot {
-                let results = self.items.filter { $0.id == (rest.value!["id"] as! String)}
-                let exists = results.isEmpty == false
-                if exists == true{
-                    continue
-                }
-                
-                let dateFormatter = NSDateFormatter()
-                dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
-                let date = dateFormatter.dateFromString(rest.value!["timestamp"] as! String)
-                var sig = ""
-                if let signature:String = rest.value!["signature"] as? String{
-                    sig=signature
-                }
-                let tempItem: Order = Order(menu_item: rest.value!["menu_item"] as! String,
-                    description_of_item: rest.value!["description"] as! String,
-                    user:rest.value!["user"] as! String,
-                    id: rest.value!["id"] as! String,
-                    timestamp: date!,
-                    price: Double(rest.value!["price"] as! String)!,
-                    userid: rest.value!["userid"] as! String,
-                    pay_with_IA: (rest.value!["pay_with_IA"] as! String).toBool()!,
-                    signature: self.makeImageFromString(sig)
-                )
-                self.items.append(tempItem)
-                self.reloadDelegateData()
-                
-            }
-            self.items.sortInPlace({ $0.timestamp.compare($1.timestamp) == NSComparisonResult.OrderedDescending })
-            }, withCancelBlock: { error in
-                print(error.description)
-        })
     }
     func makeImageFromString(imageSnap: String) -> UIImage?{
         if(imageSnap==""){
@@ -77,5 +38,53 @@ class OrdersInstance: ConfigureData, FirebaseItemDelegate {
             return decodedImage
         }
     }
+}
+extension OrdersInstance: ConfigureData{
+    func config(database: FIRDatabaseReference,completion:()->Void){
+        database.observeEventType(.Value, withBlock: { snapshot in
+            let enumerator = snapshot.children
+            while let rest = enumerator.nextObject() as? FIRDataSnapshot {
+                if self.items.contains({$0.id == (rest.value!["id"] as! String)}) == true{
+                    continue
+                }
+                
+                self.items.append(self.itemFactory(rest))
+            }
+            completion()
+            }, withCancelBlock: { error in
+                print(error.description)
+        })
+    }
 
+    static func getInstance() -> ConfigureData {
+        return sharedInstance
+    }
+}
+extension OrdersInstance {
+    func reloadDelegateData() {
+        if var tableDelegate = self.tableDelegate{
+            tableDelegate.items = self.items
+            tableDelegate.reloadData()
+        }
+    }
+    func itemFactory(rest: FIRDataSnapshot) -> FirebaseItem{
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
+        let date = dateFormatter.dateFromString(rest.value!["timestamp"] as! String)
+        var sig = ""
+        if let signature:String = rest.value!["signature"] as? String{
+            sig=signature
+        }
+        return Order(menu_item: rest.value!["menu_item"] as! String,
+                     description_of_item: rest.value!["description"] as! String,
+                     user:rest.value!["user"] as! String,
+                     id: rest.value!["id"] as! String,
+                     timestamp: date!,
+                     price: Double(rest.value!["price"] as! String)!,
+                     userid: rest.value!["userid"] as! String,
+                     pay_with_IA: (rest.value!["pay_with_IA"] as! String).toBool()!,
+                     signature: self.makeImageFromString(sig)
+        )
+
+    }
 }

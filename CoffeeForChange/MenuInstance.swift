@@ -9,37 +9,49 @@
 import Foundation
 import Firebase
 
-class MenuInstance: ConfigureData, FirebaseItemDelegate {
-    var items: [FirebaseItem] = []
-    var firebaseRef: FIRDatabaseReference{
-        get {
-            return DataInstance.sharedInstance.menuRef
+class MenuInstance: FirebaseItemDelegate {
+    var items: [FirebaseItem] = [] {
+        didSet {
+            self.reloadDelegateData()
         }
     }
-    static let sharedMenu = MenuInstance()
+    var instanceType: Instance {
+        return .Menu
+    }
+    private static let sharedInstance = MenuInstance()
     var tableDelegate: FirebaseTableDelegate?
     init(){
         
     }
-    func config(completion:()->Void){
-        firebaseRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+}
+extension MenuInstance: ConfigureData {
+    static func getInstance() -> ConfigureData {
+        return sharedInstance
+    }
+    func config(database: FIRDatabaseReference,completion:()->Void){
+        database.observeSingleEventOfType(.Value, withBlock: { snapshot in
             let enumerator = snapshot.children
             while let rest = enumerator.nextObject() as? FIRDataSnapshot {
                 let secondEnum = rest.children
                 while let nextLevel = secondEnum.nextObject() as? FIRDataSnapshot{
-                    let tempItem: Menu = Menu(price: ((nextLevel.value!["price"] as! NSNumber).doubleValue as Double?)!, name: nextLevel.value!["name"] as! String, id: nextLevel.value!["id"] as! String)
-                    self.items.append(tempItem)
-                    self.reloadDelegateData()
+                    self.items.append(self.itemFactory(nextLevel))
                 }
             }
+            completion()
             }, withCancelBlock: { error in
                 print(error.description)
         })
-
+        
     }
+}
+extension MenuInstance {
     func reloadDelegateData() {
-        if let tableDelegate = self.tableDelegate{
+        if var tableDelegate = self.tableDelegate{
+            tableDelegate.items = self.items
             tableDelegate.reloadData()
         }
+    }
+    func itemFactory(rest: FIRDataSnapshot) -> FirebaseItem{
+        return Menu(price: ((rest.value!["price"] as! NSNumber).doubleValue as Double?)!, name: rest.value!["name"] as! String, id: rest.value!["id"] as! String)
     }
 }

@@ -10,7 +10,10 @@ import Foundation
 import Firebase
 
 protocol ConfigureData {
-    func config(completion:()->Void)
+    func config(database: FIRDatabaseReference, completion:()->Void)
+    var instanceType: Instance { get }
+    static func getInstance()->ConfigureData
+    var tableDelegate: FirebaseTableDelegate? { get set }
 }
 protocol FirebaseItem {
     var id: String { get set }
@@ -18,10 +21,9 @@ protocol FirebaseItem {
 }
 protocol FirebaseItemDelegate {
     var items: [FirebaseItem] { get set }
-    var firebaseRef: FIRDatabaseReference { get }
-    var tableDelegate: FirebaseTableDelegate? { get set }
-    func reloadDelegateData()
+    func itemFactory(rest: FIRDataSnapshot) -> FirebaseItem
 }
 protocol FirebaseTableDelegate {
     func reloadData()
+    var items: [FirebaseItem] { get set }
 }

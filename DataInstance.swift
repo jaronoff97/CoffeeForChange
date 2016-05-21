@@ -9,24 +9,34 @@
 import Foundation
 import Firebase
 
+enum Instance {
+    case User
+    case Menu
+    case Order
+    func getRef()->FIRDatabaseReference{
+        switch self {
+        case .Menu:
+            return DataInstance.sharedInstance.menuRef
+        case .Order:
+            return DataInstance.sharedInstance.orderRef
+        case .User:
+            return DataInstance.sharedInstance.userRef
+        }
+    }
+}
 class DataInstance {
     static let sharedInstance = DataInstance()
     var rootRef = FIRDatabase.database().reference()
     var menuRef: FIRDatabaseReference{
-        get {
-            return rootRef.child("menu")
-        }
+        return rootRef.child("menu")
     }
     var userRef: FIRDatabaseReference{
-        get {
-            return rootRef.child("users")
-        }
+        return rootRef.child("users")
     }
     var orderRef: FIRDatabaseReference{
-        get {
-            return rootRef.child("orders")
-        }
+        return rootRef.child("orders")
     }
+    var configInstances:[ConfigureData] = [(MenuInstance.getInstance()),(UsersInstance.getInstance()),(OrdersInstance.getInstance())]
     
     init(){
         FIRAuth.auth()!.signInAnonymouslyWithCompletion() { (user, error) in
@@ -35,6 +45,16 @@ class DataInstance {
             } else {
                 print ("Signed in with uid:", user!.uid)
             }
+        }
+        for (instance) in configInstances {
+            instance.config(instance.instanceType.getRef(), completion: {
+                print("Completed")
+            })
+        }
+    }
+    func setDelegate(delegate: FirebaseTableDelegate, instance: Instance) -> Void {
+        if configInstances[configInstances.indexOf({$0.instanceType == instance})!].tableDelegate == nil{
+            configInstances[configInstances.indexOf({$0.instanceType == instance})!].tableDelegate = delegate
         }
         
     }
