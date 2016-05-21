@@ -14,15 +14,12 @@
 		8926888C1C886681009B4B93 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8926888B1C886681009B4B93 /* UserViewController.swift */; };
 		89B7CE401C8901B200E12131 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B7CE3F1C8901B200E12131 /* Menu.swift */; };
 		89E18ED11C87A15200916C5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18ED01C87A15200916C5D /* AppDelegate.swift */; };
-		89E18ED31C87A15200916C5D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18ED21C87A15200916C5D /* FirstViewController.swift */; };
-		89E18ED51C87A15200916C5D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18ED41C87A15200916C5D /* SecondViewController.swift */; };
 		89E18ED81C87A15200916C5D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89E18ED61C87A15200916C5D /* Main.storyboard */; };
 		89E18EDA1C87A15200916C5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89E18ED91C87A15200916C5D /* Assets.xcassets */; };
 		89E18EDD1C87A15200916C5D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89E18EDB1C87A15200916C5D /* LaunchScreen.storyboard */; };
 		89E18EE81C87A15200916C5D /* CoffeeForChangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18EE71C87A15200916C5D /* CoffeeForChangeTests.swift */; };
 		89E18EF31C87A15200916C5D /* CoffeeForChangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18EF21C87A15200916C5D /* CoffeeForChangeUITests.swift */; };
 		89E18F011C87A81500916C5D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18F001C87A81500916C5D /* User.swift */; };
-		89E326091C932CA400007C05 /* CurrentOrdersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E326081C932CA400007C05 /* CurrentOrdersController.swift */; };
 		89E3260B1C935B0D00007C05 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E3260A1C935B0D00007C05 /* Order.swift */; };
 		89EA531F1CEEBE8600736D84 /* DataInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA531E1CEEBE8600736D84 /* DataInstance.swift */; };
 		89EA53211CEEC1A300736D84 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA53201CEEC1A300736D84 /* Protocols.swift */; };
@@ -30,6 +27,10 @@
 		89EA53251CEEC6DB00736D84 /* MenuInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA53241CEEC6DB00736D84 /* MenuInstance.swift */; };
 		89EA53271CEEC6EF00736D84 /* OrdersInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA53261CEEC6EF00736D84 /* OrdersInstance.swift */; };
 		89EA532D1CEECCEE00736D84 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA532C1CEECCEE00736D84 /* Extensions.swift */; };
+		89EA532F1CEFB0F700736D84 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89EA532E1CEFB0F700736D84 /* GoogleService-Info.plist */; };
+		89EA53311CEFB1D800736D84 /* CCUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA53301CEFB1D800736D84 /* CCUsersTableViewController.swift */; };
+		89EA53331CEFB2A800736D84 /* CCMenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA53321CEFB2A800736D84 /* CCMenuTableViewController.swift */; };
+		89EA53351CEFB2D400736D84 /* CCOrderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA53341CEFB2D400736D84 /* CCOrderTableViewController.swift */; };
 		9D9076E3CEE7C9ED304FCB75 /* Pods_CoffeeForChangeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33C81CA064762686C169A122 /* Pods_CoffeeForChangeUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -61,8 +62,6 @@
 		89B7CE3F1C8901B200E12131 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		89E18ECD1C87A15200916C5D /* CoffeeForChange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeForChange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89E18ED01C87A15200916C5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		89E18ED21C87A15200916C5D /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		89E18ED41C87A15200916C5D /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		89E18ED71C87A15200916C5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89E18ED91C87A15200916C5D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89E18EDC1C87A15200916C5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -74,7 +73,6 @@
 		89E18EF21C87A15200916C5D /* CoffeeForChangeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeForChangeUITests.swift; sourceTree = "<group>"; };
 		89E18EF41C87A15200916C5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89E18F001C87A81500916C5D /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		89E326081C932CA400007C05 /* CurrentOrdersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentOrdersController.swift; sourceTree = "<group>"; };
 		89E3260A1C935B0D00007C05 /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		89EA531E1CEEBE8600736D84 /* DataInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataInstance.swift; path = ../DataInstance.swift; sourceTree = "<group>"; };
 		89EA53201CEEC1A300736D84 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
@@ -82,6 +80,12 @@
 		89EA53241CEEC6DB00736D84 /* MenuInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuInstance.swift; sourceTree = "<group>"; };
 		89EA53261CEEC6EF00736D84 /* OrdersInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrdersInstance.swift; sourceTree = "<group>"; };
 		89EA532C1CEECCEE00736D84 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		89EA532E1CEFB0F700736D84 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		89EA53301CEFB1D800736D84 /* CCUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCUsersTableViewController.swift; sourceTree = "<group>"; };
+		89EA53321CEFB2A800736D84 /* CCMenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCMenuTableViewController.swift; sourceTree = "<group>"; };
+		89EA53341CEFB2D400736D84 /* CCOrderTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCOrderTableViewController.swift; sourceTree = "<group>"; };
+		89EA53371CF0134E00736D84 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		89EA53391CF0136900736D84 /* MGSwipeTableCell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MGSwipeTableCell.framework; path = "../../../../Library/Developer/Xcode/DerivedData/CoffeeForChange-bwvfalffqvbrbwbvffzmvipkvaer/Build/Products/Debug-iphonesimulator/MGSwipeTableCell/MGSwipeTableCell.framework"; sourceTree = "<group>"; };
 		C13B1239C89BFA4C7CF56975 /* Pods_CoffeeForChangeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoffeeForChangeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9DD3AB7808FA68905F52A4E /* Pods_CoffeeForChange.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoffeeForChange.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DED76143178C820FDA4A9976 /* Pods-CoffeeForChange.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoffeeForChange.release.xcconfig"; path = "Pods/Target Support Files/Pods-CoffeeForChange/Pods-CoffeeForChange.release.xcconfig"; sourceTree = "<group>"; };
@@ -143,12 +147,14 @@
 		89E18ECF1C87A15200916C5D /* CoffeeForChange */ = {
 			isa = PBXGroup;
 			children = (
+				89EA532E1CEFB0F700736D84 /* GoogleService-Info.plist */,
 				89EA532A1CEEC73400736D84 /* CustomCells */,
 				89EA53281CEEC71700736D84 /* Instances */,
 				89EA53291CEEC72A00736D84 /* FirebaseItems */,
-				89EA532B1CEECB0200736D84 /* ViewControllers */,
-				89E18ED61C87A15200916C5D /* Main.storyboard */,
+				89EA532B1CEECB0200736D84 /* OldViewControllers */,
+				89EA53361CEFB3CB00736D84 /* NewViewControllers */,
 				89E18ED01C87A15200916C5D /* AppDelegate.swift */,
+				89E18ED61C87A15200916C5D /* Main.storyboard */,
 				89E18ED91C87A15200916C5D /* Assets.xcassets */,
 				89E18EDB1C87A15200916C5D /* LaunchScreen.storyboard */,
 				89E18EDE1C87A15200916C5D /* Info.plist */,
@@ -206,20 +212,29 @@
 			name = CustomCells;
 			sourceTree = "<group>";
 		};
-		89EA532B1CEECB0200736D84 /* ViewControllers */ = {
+		89EA532B1CEECB0200736D84 /* OldViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				89E18ED21C87A15200916C5D /* FirstViewController.swift */,
-				89E18ED41C87A15200916C5D /* SecondViewController.swift */,
 				8926888B1C886681009B4B93 /* UserViewController.swift */,
-				89E326081C932CA400007C05 /* CurrentOrdersController.swift */,
 			);
-			name = ViewControllers;
+			name = OldViewControllers;
+			sourceTree = "<group>";
+		};
+		89EA53361CEFB3CB00736D84 /* NewViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				89EA53341CEFB2D400736D84 /* CCOrderTableViewController.swift */,
+				89EA53321CEFB2A800736D84 /* CCMenuTableViewController.swift */,
+				89EA53301CEFB1D800736D84 /* CCUsersTableViewController.swift */,
+			);
+			name = NewViewControllers;
 			sourceTree = "<group>";
 		};
 		DF12BC5F2605C7F742FF247E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				89EA53391CF0136900736D84 /* MGSwipeTableCell.framework */,
+				89EA53371CF0134E00736D84 /* CoreData.framework */,
 				E2549582842E014E9504F768 /* Pods.framework */,
 				D9DD3AB7808FA68905F52A4E /* Pods_CoffeeForChange.framework */,
 				C13B1239C89BFA4C7CF56975 /* Pods_CoffeeForChangeTests.framework */,
@@ -360,6 +375,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89E18EDD1C87A15200916C5D /* LaunchScreen.storyboard in Resources */,
+				89EA532F1CEFB0F700736D84 /* GoogleService-Info.plist in Resources */,
 				89E18EDA1C87A15200916C5D /* Assets.xcassets in Resources */,
 				89E18ED81C87A15200916C5D /* Main.storyboard in Resources */,
 			);
@@ -515,16 +531,16 @@
 				892096871C93DBBA0034B13D /* OrderTableCell.swift in Sources */,
 				89EA53211CEEC1A300736D84 /* Protocols.swift in Sources */,
 				892096851C93C56B0034B13D /* MenuTableCell.swift in Sources */,
-				89E326091C932CA400007C05 /* CurrentOrdersController.swift in Sources */,
+				89EA53331CEFB2A800736D84 /* CCMenuTableViewController.swift in Sources */,
 				89EA53231CEEC6BA00736D84 /* UsersInstance.swift in Sources */,
 				89E3260B1C935B0D00007C05 /* Order.swift in Sources */,
 				89E18F011C87A81500916C5D /* User.swift in Sources */,
 				89EA53271CEEC6EF00736D84 /* OrdersInstance.swift in Sources */,
 				89EA532D1CEECCEE00736D84 /* Extensions.swift in Sources */,
+				89EA53351CEFB2D400736D84 /* CCOrderTableViewController.swift in Sources */,
 				8926888C1C886681009B4B93 /* UserViewController.swift in Sources */,
-				89E18ED51C87A15200916C5D /* SecondViewController.swift in Sources */,
 				89E18ED11C87A15200916C5D /* AppDelegate.swift in Sources */,
-				89E18ED31C87A15200916C5D /* FirstViewController.swift in Sources */,
+				89EA53311CEFB1D800736D84 /* CCUsersTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -669,12 +685,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = CoffeeForChange/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.milton.CoffeeForChange;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -685,12 +703,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = CoffeeForChange/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.milton.CoffeeForChange;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
