@@ -18,7 +18,7 @@ class UsersInstance: FirebaseItemDelegate {
     var instanceType: Instance {
         return .User
     }
-    private static let sharedInstance = MenuInstance()
+    private static let sharedInstance = UsersInstance()
     var tableDelegate: FirebaseTableDelegate?
 
     init(){

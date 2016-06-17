@@ -25,6 +25,7 @@ enum Instance {
     }
 }
 class DataInstance {
+    
     static let sharedInstance = DataInstance()
     var rootRef = FIRDatabase.database().reference()
     var menuRef: FIRDatabaseReference{
@@ -39,22 +40,24 @@ class DataInstance {
     var configInstances:[ConfigureData] = [(MenuInstance.getInstance()),(UsersInstance.getInstance()),(OrdersInstance.getInstance())]
     
     init(){
+        print("SOMETHING HAPPENED")
         FIRAuth.auth()!.signInAnonymouslyWithCompletion() { (user, error) in
             if let error = error {
                 print("Sign in failed:", error.localizedDescription)
             } else {
                 print ("Signed in with uid:", user!.uid)
+                for (instance) in self.configInstances {
+                    instance.config(instance.instanceType.getRef(), completion: {
+                        print("Completed \(instance.instanceType)")
+                    })
+                }
             }
-        }
-        for (instance) in configInstances {
-            instance.config(instance.instanceType.getRef(), completion: {
-                print("Completed")
-            })
         }
     }
     func setDelegate(delegate: FirebaseTableDelegate, instance: Instance) -> Void {
         if configInstances[configInstances.indexOf({$0.instanceType == instance})!].tableDelegate == nil{
             configInstances[configInstances.indexOf({$0.instanceType == instance})!].tableDelegate = delegate
+            configInstances[configInstances.indexOf({$0.instanceType == instance})!].reloadDelegateData()
         }
         
     }

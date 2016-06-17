@@ -12,6 +12,7 @@ class CCMenuTableViewController: UITableViewController {
     var items: [FirebaseItem] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("here for menu delegate")
         DataInstance.sharedInstance.setDelegate(self, instance: .Menu)
 
         // Uncomment the following line to preserve selection between presentations
@@ -21,6 +22,22 @@ class CCMenuTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
+    @IBAction func newItem(sender: AnyObject) {
+        let ac = UIAlertController(title: "New Item", message: "Make new menu item", preferredStyle: .Alert)
+        ac.addTextFieldWithConfigurationHandler { (textfield) in
+            textfield.placeholder = "Item Name"
+        }
+        ac.addTextFieldWithConfigurationHandler { (textfield) in
+            textfield.placeholder = "Item Price"
+        }
+        ac.addAction(UIAlertAction(title: "Done", style: .Default, handler: { (action) in
+            print("complete")
+        }))
+        ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) in
+            print("complete")
+        }))
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -30,7 +47,7 @@ class CCMenuTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

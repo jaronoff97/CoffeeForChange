@@ -12,6 +12,7 @@ import Firebase
 protocol ConfigureData {
     func config(database: FIRDatabaseReference, completion:()->Void)
     var instanceType: Instance { get }
+    func reloadDelegateData()
     static func getInstance()->ConfigureData
     var tableDelegate: FirebaseTableDelegate? { get set }
 }

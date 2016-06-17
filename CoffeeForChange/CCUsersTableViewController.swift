@@ -9,7 +9,7 @@
 import UIKit
 
 class CCUsersTableViewController: UITableViewController {
-    var searchController: UISearchController!
+    var searchController = UISearchController(searchResultsController: nil)
     var items: [FirebaseItem] = []
     var filteredUsers = [FirebaseItem]()
     var shouldShowSearchResults = false
@@ -18,7 +18,9 @@ class CCUsersTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DataInstance.sharedInstance.setDelegate(self, instance: .Menu)
+        DataInstance.sharedInstance.setDelegate(self, instance: .User)
+        self.configureSearchController()
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -35,7 +37,7 @@ class CCUsersTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     /*
@@ -154,12 +156,14 @@ extension CCUsersTableViewController: UISearchBarDelegate{
 }
 extension CCUsersTableViewController: UISearchResultsUpdating{
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let searchString = searchController.searchBar.text
         
+        guard let searchString = searchController.searchBar.text else {
+            return
+        }
         // Filter the data array and get only those countries that match the search text.
         filteredUsers = items.filter({ (temp_user) -> Bool in
-            let fullUserData: NSString = temp_user.name
-            let dataToReturn = (fullUserData.rangeOfString(searchString!, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
+            let fullUserData: NSString = (temp_user as! User).full_name
+            let dataToReturn = (fullUserData.rangeOfString(searchString, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
             return dataToReturn
         })
         
@@ -181,10 +185,10 @@ extension CCUsersTableViewController{
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("userCell")! as UITableViewCell
         if(shouldShowSearchResults){
-            cell.textLabel?.text = filteredUsers[indexPath.row].name
+            cell.textLabel?.text = (filteredUsers[indexPath.row] as! User).full_name
         }
         else{
-            cell.textLabel?.text = self.items[indexPath.row].name
+            cell.textLabel?.text = (self.items[indexPath.row] as! User).full_name
         }
         return cell
     }
@@ -198,7 +202,7 @@ extension CCUsersTableViewController{
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        self.performSegueWithIdentifier("detailTableSegue", sender: self)
+        //self.performSegueWithIdentifier("detailTableSegue", sender: self)
     }
 }
 

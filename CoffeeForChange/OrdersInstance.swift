@@ -20,7 +20,7 @@ class OrdersInstance: FirebaseItemDelegate {
     var instanceType: Instance {
         return .Order
     }
-    private static let sharedInstance = MenuInstance()
+    private static let sharedInstance = OrdersInstance()
     var tableDelegate: FirebaseTableDelegate?
 
     
