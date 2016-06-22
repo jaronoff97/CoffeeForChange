@@ -27,7 +27,7 @@ class OrdersInstance: FirebaseItemDelegate {
     init(){
         
     }
-    func makeImageFromString(imageSnap: String) -> UIImage?{
+    static func makeImageFromString(imageSnap: String) -> UIImage?{
         if(imageSnap==""){
             return nil
         }else{
@@ -68,9 +68,6 @@ extension OrdersInstance {
         }
     }
     func itemFactory(rest: FIRDataSnapshot) -> FirebaseItem{
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
-        let date = dateFormatter.dateFromString(rest.value!["timestamp"] as! String)
         var sig = ""
         if let signature:String = rest.value!["signature"] as? String{
             sig=signature
@@ -79,11 +76,11 @@ extension OrdersInstance {
                      description_of_item: rest.value!["description"] as! String,
                      user:rest.value!["user"] as! String,
                      id: rest.value!["id"] as! String,
-                     timestamp: date!,
-                     price: Double(rest.value!["price"] as! String)!,
+                     timestamp: rest.value!["timestamp"] as! String,
+                     price: rest.value!["price"] as! Double,
                      userid: rest.value!["userid"] as! String,
                      pay_with_IA: (rest.value!["pay_with_IA"] as! String).toBool()!,
-                     signature: self.makeImageFromString(sig)
+                     signature: (sig)
         )
 
     }

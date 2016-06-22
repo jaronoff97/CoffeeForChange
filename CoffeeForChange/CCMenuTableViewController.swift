@@ -31,12 +31,16 @@ class CCMenuTableViewController: UITableViewController {
             textfield.placeholder = "Item Price"
         }
         ac.addAction(UIAlertAction(title: "Done", style: .Default, handler: { (action) in
-            print("complete")
+            print("Done")
+            let newItem = Menu(price: Double(ac.textFields![1].text!)!, name: ac.textFields![0].text!, id: NSUUID().UUIDString)
+            DataInstance.sharedInstance.menuRef.child(newItem.id).setValue(newItem.toJSON())
         }))
         ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) in
-            print("complete")
+            print("Cancel")
         }))
-        
+        self.presentViewController(ac, animated: true) { 
+            print("Finished")
+        }
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -79,6 +83,42 @@ extension CCMenuTableViewController{
      
      return cell
      }
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        var item = items[indexPath.row] as! Menu
+        let ac = UIAlertController(title: "What do you want to do?", message: "name: \(item.name) \n price: \(item.price)", preferredStyle: .Alert)
+        ac.addAction(UIAlertAction(title: "Done", style: .Default, handler: { (action) in
+            
+        }))
+        ac.addAction(UIAlertAction(title: "Change", style: .Default, handler: { (action) in
+            
+            let sub_ac = UIAlertController(title: "Change Item", message: "Change \(item.name)", preferredStyle: .Alert)
+            sub_ac.addTextFieldWithConfigurationHandler { (textfield) in
+                textfield.placeholder = "Item Name"
+            }
+            sub_ac.addTextFieldWithConfigurationHandler { (textfield) in
+                textfield.placeholder = "Item Price"
+            }
+            sub_ac.addAction(UIAlertAction(title: "Finished", style: .Default, handler: { (action) in
+                let new_price = sub_ac.textFields![1].text!
+                let new_name = sub_ac.textFields![0].text!
+                item.price = (new_price == "" ? item.price : Double(new_price)!)
+                item.name = (new_name == "" ? item.name : new_name)
+                DataInstance.sharedInstance.menuRef.child(item.id).updateChildValues(item.toJSON())
+            }))
+            self.presentViewController(sub_ac, animated: true, completion: { 
+                print("Finished")
+            })
+        }))
+        
+        ac.addAction(UIAlertAction(title: "Delete Item", style: .Default, handler: { (action) in
+            DataInstance.sharedInstance.menuRef.child(item.id).removeValue()
+        }))
+        self.presentViewController(ac, animated: true) { 
+            print("Done")
+        }
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
     
     
     /*

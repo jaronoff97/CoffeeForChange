@@ -21,6 +21,7 @@
 		89E18EF31C87A15200916C5D /* CoffeeForChangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18EF21C87A15200916C5D /* CoffeeForChangeUITests.swift */; };
 		89E18F011C87A81500916C5D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E18F001C87A81500916C5D /* User.swift */; };
 		89E3260B1C935B0D00007C05 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E3260A1C935B0D00007C05 /* Order.swift */; };
+		89E8D56E1D16931300AF5BDA /* CCGeneratePDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8D56D1D16931300AF5BDA /* CCGeneratePDF.swift */; };
 		89EA531F1CEEBE8600736D84 /* DataInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA531E1CEEBE8600736D84 /* DataInstance.swift */; };
 		89EA53211CEEC1A300736D84 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA53201CEEC1A300736D84 /* Protocols.swift */; };
 		89EA53231CEEC6BA00736D84 /* UsersInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA53221CEEC6BA00736D84 /* UsersInstance.swift */; };
@@ -74,6 +75,7 @@
 		89E18EF41C87A15200916C5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89E18F001C87A81500916C5D /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		89E3260A1C935B0D00007C05 /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		89E8D56D1D16931300AF5BDA /* CCGeneratePDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCGeneratePDF.swift; sourceTree = "<group>"; };
 		89EA531E1CEEBE8600736D84 /* DataInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataInstance.swift; path = ../DataInstance.swift; sourceTree = "<group>"; };
 		89EA53201CEEC1A300736D84 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		89EA53221CEEC6BA00736D84 /* UsersInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersInstance.swift; sourceTree = "<group>"; };
@@ -151,7 +153,6 @@
 				89EA532A1CEEC73400736D84 /* CustomCells */,
 				89EA53281CEEC71700736D84 /* Instances */,
 				89EA53291CEEC72A00736D84 /* FirebaseItems */,
-				89EA532B1CEECB0200736D84 /* OldViewControllers */,
 				89EA53361CEFB3CB00736D84 /* NewViewControllers */,
 				89E18ED01C87A15200916C5D /* AppDelegate.swift */,
 				89E18ED61C87A15200916C5D /* Main.storyboard */,
@@ -184,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				89EA531E1CEEBE8600736D84 /* DataInstance.swift */,
+				89E8D56D1D16931300AF5BDA /* CCGeneratePDF.swift */,
 				89EA53241CEEC6DB00736D84 /* MenuInstance.swift */,
 				89EA53261CEEC6EF00736D84 /* OrdersInstance.swift */,
 				89EA53221CEEC6BA00736D84 /* UsersInstance.swift */,
@@ -212,17 +214,10 @@
 			name = CustomCells;
 			sourceTree = "<group>";
 		};
-		89EA532B1CEECB0200736D84 /* OldViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				8926888B1C886681009B4B93 /* UserViewController.swift */,
-			);
-			name = OldViewControllers;
-			sourceTree = "<group>";
-		};
 		89EA53361CEFB3CB00736D84 /* NewViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				8926888B1C886681009B4B93 /* UserViewController.swift */,
 				89EA53341CEFB2D400736D84 /* CCOrderTableViewController.swift */,
 				89EA53321CEFB2A800736D84 /* CCMenuTableViewController.swift */,
 				89EA53301CEFB1D800736D84 /* CCUsersTableViewController.swift */,
@@ -541,6 +536,7 @@
 				8926888C1C886681009B4B93 /* UserViewController.swift in Sources */,
 				89E18ED11C87A15200916C5D /* AppDelegate.swift in Sources */,
 				89EA53311CEFB1D800736D84 /* CCUsersTableViewController.swift in Sources */,
+				89E8D56E1D16931300AF5BDA /* CCGeneratePDF.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

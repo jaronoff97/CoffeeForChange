@@ -12,4 +12,11 @@ struct Menu: FirebaseItem {
     var price: Double
     var name: String
     var id: String
+    func toJSON() -> [String : AnyObject] {
+        return [
+            "id":self.id,
+            "name":self.name,
+            "price":self.price
+        ]
+    }
 }

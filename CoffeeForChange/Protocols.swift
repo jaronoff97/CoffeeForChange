@@ -19,6 +19,7 @@ protocol ConfigureData {
 protocol FirebaseItem {
     var id: String { get set }
     var name: String { get set }
+    func toJSON()->[String:AnyObject]
 }
 protocol FirebaseItemDelegate {
     var items: [FirebaseItem] { get set }

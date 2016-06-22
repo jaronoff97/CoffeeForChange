@@ -23,4 +23,15 @@ struct User: FirebaseItem {
     var total_money: Double
     var year: Int
     var previous_orders: [String] = []
+    func toJSON() -> [String : AnyObject] {
+        return [
+            "first":self.name,
+            "id":self.id,
+            "last":self.last_name,
+            "money_left":self.money,
+            "total_money":self.total_money,
+            "user_id":self.user_id,
+            "year":self.year
+        ]
+    }
 }

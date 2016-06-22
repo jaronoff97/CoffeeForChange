@@ -22,9 +22,22 @@ struct Order: FirebaseItem {
         }
     }
     var id: String
-    var timestamp: NSDate
+    var timestamp: String
     var price: Double
     var userid: String
     var pay_with_IA: Bool
-    var signature: UIImage?
+    var signature: String?
+    func toJSON() -> [String : AnyObject] {
+        return [
+            "description":self.description_of_item,
+            "id":self.id,
+            "menu_item":self.menu_item,
+            "price":self.price,
+            "pay_with_IA":self.pay_with_IA.description,
+            "timestamp":self.timestamp,
+            "signature":self.signature ?? "",
+            "user": self.user,
+            "userid": self.userid
+        ]
+    }
 }

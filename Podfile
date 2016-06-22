@@ -11,6 +11,7 @@ pod 'Firebase/Database'
 pod 'Firebase/Auth'
 pod 'EPSignature'
 pod 'MGSwipeTableCell'
+pod 'SimplePDF'
 end
 
 target 'CoffeeForChangeTests' do

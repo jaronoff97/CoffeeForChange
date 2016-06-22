@@ -27,6 +27,7 @@ enum Instance {
 class DataInstance {
     
     static let sharedInstance = DataInstance()
+    var user: User?
     var rootRef = FIRDatabase.database().reference()
     var menuRef: FIRDatabaseReference{
         return rootRef.child("menu")
@@ -39,13 +40,25 @@ class DataInstance {
     }
     var configInstances:[ConfigureData] = [(MenuInstance.getInstance()),(UsersInstance.getInstance()),(OrdersInstance.getInstance())]
     
+    func getData(forInstance query:Instance)->(ConfigureData){
+            switch query{
+                case .Menu:
+                    return configInstances[0]
+                case .User:
+                    return configInstances[1]
+                case .Order:
+                    return configInstances[2]
+            }
+    }
+    
+    
     init(){
-        print("SOMETHING HAPPENED")
         FIRAuth.auth()!.signInAnonymouslyWithCompletion() { (user, error) in
             if let error = error {
                 print("Sign in failed:", error.localizedDescription)
             } else {
                 print ("Signed in with uid:", user!.uid)
+                CCGeneratePDF.generate()
                 for (instance) in self.configInstances {
                     instance.config(instance.instanceType.getRef(), completion: {
                         print("Completed \(instance.instanceType)")
@@ -59,6 +72,5 @@ class DataInstance {
             configInstances[configInstances.indexOf({$0.instanceType == instance})!].tableDelegate = delegate
             configInstances[configInstances.indexOf({$0.instanceType == instance})!].reloadDelegateData()
         }
-        
     }
 }

@@ -32,6 +32,7 @@ PODS:
   - GoogleUtilities (1.3.1):
     - GoogleSymbolUtilities (~> 1.0)
   - MGSwipeTableCell (1.5.5)
+  - SimplePDF (1.0.1)
 
 DEPENDENCIES:
   - EPSignature
@@ -40,6 +41,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - MGSwipeTableCell
+  - SimplePDF
 
 SPEC CHECKSUMS:
   EPSignature: 3bb269db08c47041bcc92151688600ab835b5a80
@@ -53,7 +55,8 @@ SPEC CHECKSUMS:
   GoogleSymbolUtilities: 33117db1b5f290c6fbf259585e4885b4c84b98d7
   GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
   MGSwipeTableCell: bafeb5f351124544c9364ecbdf24c7b06a37d340
+  SimplePDF: e33c9f6b827b18e57d463211321d03edd74fa60e
 
-PODFILE CHECKSUM: e990453b74fda725f413dee419d0959666b706cf
+PODFILE CHECKSUM: 267819fba6e108377015ec44dc8d7c3201951448
 
 COCOAPODS: 1.0.0

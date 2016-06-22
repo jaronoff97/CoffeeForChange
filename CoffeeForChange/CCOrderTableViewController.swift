@@ -103,28 +103,33 @@ extension CCOrderTableViewController{
         return UIColor(red: 1.0, green: val, blue: 0.0, alpha: 1.0)
     }
     func removeFromFirebase(index: Int){
-        /*let firebase_to_remove = self.firebase_orders.childByAppendingPath(self.items[index].id)
+        let firebase_to_remove = DataInstance.sharedInstance.orderRef.child(self.items[index].id)
         firebase_to_remove.removeValue()
-        self.items.removeAtIndex(index)*/
+        self.items.removeAtIndex(index)
         tableView.reloadData()
     }
     func refund(index: Int){
-        /*let refund_user = Firebase(url: "https://coffeeforchange.firebaseio.com/users/\(self.items[index].userid)")
+        let refund_user = DataInstance.sharedInstance.userRef.child((self.items[index] as! Order).userid)
         print(refund_user)
         refund_user.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            let new_money = (snapshot.value["money_left"] as! Double)+self.items[index].price
+            print(snapshot)
+            print(self.items)
+            let new_money = (snapshot.value!["money_left"] as! Double)+(self.items[index] as! Order).price
             refund_user.updateChildValues(["money_left":new_money])
+            self.removeFromFirebase(index)
             }, withCancelBlock: { error in
                 print(error.description)
-        })*/
+        })
     }
     func openCancelDialog(index: Int){
         let alertController = UIAlertController(title: "Warning", message: "Do you want to cancel your order", preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
             if((self.items[index] as! Order).pay_with_IA==true){
                 self.refund(index)
+            } else {
+                self.removeFromFirebase(index)
             }
-            self.removeFromFirebase(index)
+            
         }))
         alertController.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel,handler: { (action:UIAlertAction) -> Void in
             
@@ -140,6 +145,9 @@ extension CCOrderTableViewController{
             
         }))
         self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     

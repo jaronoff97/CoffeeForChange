@@ -13,7 +13,6 @@ class CCUsersTableViewController: UITableViewController {
     var items: [FirebaseItem] = []
     var filteredUsers = [FirebaseItem]()
     var shouldShowSearchResults = false
-    var userToPass: User!
     
     
     override func viewDidLoad() {
@@ -122,13 +121,14 @@ extension CCUsersTableViewController{
         if (segue.identifier == "detailTableSegue") {
             // initialize new view controller and cast it as your view controller
             //let viewController = (segue.destinationViewController as! UINavigationController).childViewControllers[0] as! UserViewController
-            /*let viewController = segue.destinationViewController as! UserViewController
-            self.navigationItem.title = "Back"
+            let viewController = segue.destinationViewController as! UserViewController
+            self.navigationItem.title = DataInstance.sharedInstance.user!.full_name
             
             // your new view controller should have property that will store passed value
-            viewController.user = userToPass
-            viewController.navigationItem.title = userToPass.name*/
             searchController.active = false
+            self.presentViewController(viewController, animated: true, completion: { 
+                
+            })
         }
         
     }
@@ -144,6 +144,7 @@ extension CCUsersTableViewController: UISearchBarDelegate{
         shouldShowSearchResults = false
         tableView.reloadData()
     }
+    
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         if !shouldShowSearchResults {
             shouldShowSearchResults = true
@@ -195,13 +196,14 @@ extension CCUsersTableViewController{
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if(shouldShowSearchResults){
-            userToPass = filteredUsers[indexPath.row] as! User
+            DataInstance.sharedInstance.user = filteredUsers[indexPath.row] as? User
         }
         else{
-            userToPass = self.items[indexPath.row] as! User
+            DataInstance.sharedInstance.user = self.items[indexPath.row] as? User
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
+        print("test!!!")
+        print(DataInstance.sharedInstance.user)
         //self.performSegueWithIdentifier("detailTableSegue", sender: self)
     }
 }
