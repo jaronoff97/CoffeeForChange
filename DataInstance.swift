@@ -58,7 +58,6 @@ class DataInstance {
                 print("Sign in failed:", error.localizedDescription)
             } else {
                 print ("Signed in with uid:", user!.uid)
-                CCGeneratePDF.generate()
                 for (instance) in self.configInstances {
                     instance.config(instance.instanceType.getRef(), completion: {
                         print("Completed \(instance.instanceType)")

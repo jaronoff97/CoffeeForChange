@@ -29,21 +29,6 @@ extension MenuInstance: ConfigureData {
         return sharedInstance
     }
     func config(database: FIRDatabaseReference,completion:()->Void){
-        /*database.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            let enumerator = snapshot.children
-            while let rest = enumerator.nextObject() as? FIRDataSnapshot {
-                if(self.items.contains({$0.id==String(rest.value!["id"])})){
-                    
-                } else {
-                    self.items.append(self.itemFactory(rest))
-                }
-
-            }
-            completion()
-            print(self.items)
-            }, withCancelBlock: { error in
-                print(error.description)
-        })*/
         database.observeEventType(.ChildAdded, withBlock: { snapshot in
             let newItem = self.itemFactory(snapshot)
             if(self.items.contains({$0.id==newItem.id})){
