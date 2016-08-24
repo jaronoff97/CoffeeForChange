@@ -10,25 +10,14 @@ import UIKit
 import Firebase
 import MGSwipeTableCell
 
-extension String {
-    func toBool() -> Bool? {
-        switch self {
-        case "True", "true", "yes", "1":
-            return true
-        case "False", "false", "no", "0":
-            return false
-        default:
-            return nil
-        }
-    }
-}
+
 
 class CurrentOrdersController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet var tableView: UITableView!
     
     
-    var items: [Order] = []
+    
     var colors_on = false
     var firebase_orders: Firebase = Firebase(url:"https://coffeeforchange.firebaseio.com/orders")
     
@@ -42,51 +31,14 @@ class CurrentOrdersController: UIViewController, UITableViewDelegate, UITableVie
                 print("Login succeeded! \(authData)")
             }
         })
-        configureData(firebase_orders)
+        
         tableView.delegate = self
         tableView.dataSource = self
         
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
-    func configureData(firebase: Firebase) {
-        // Attach a closure to read the data at our posts reference
-        firebase.observeEventType(.Value, withBlock: { snapshot in
-            let enumerator = snapshot.children
-            while let rest = enumerator.nextObject() as? FDataSnapshot {
-                let results = self.items.filter { $0.id == (rest.value["id"] as! String)}
-                let exists = results.isEmpty == false
-                if exists == true{
-                    continue
-                }
-                
-                let dateFormatter = NSDateFormatter()
-                dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
-                let date = dateFormatter.dateFromString(rest.value["timestamp"] as! String)
-                var sig = ""
-                if let signature:String = rest.value["signature"] as? String{
-                    sig=signature
-                }
-                let tempItem: Order = Order(menu_item: rest.value["menu_item"] as! String,
-                    description_of_item: rest.value["description"] as! String,
-                    user:rest.value["user"] as! String,
-                    id: rest.value["id"] as! String,
-                    timestamp: date!,
-                    price: Double(rest.value["price"] as! String)!,
-                    userid: rest.value["userid"] as! String,
-                    pay_with_IA: (rest.value["pay_with_IA"] as! String).toBool()!,
-                    signature: self.makeImageFromString(sig)
-                )
-                self.items.append(tempItem)
-                self.tableView.reloadData()
-                
-            }
-            self.items.sortInPlace({ $0.timestamp.compare($1.timestamp) == NSComparisonResult.OrderedDescending })
-            }, withCancelBlock: { error in
-                print(error.description)
-        })
-        
-    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -172,17 +124,6 @@ class CurrentOrdersController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         return cell
-    }
-    func makeImageFromString(imageSnap: String) -> UIImage?{
-        if(imageSnap==""){
-            return nil
-        }else{
-            
-            let base64String = imageSnap
-            let imageData = NSData(base64EncodedString: base64String, options: NSDataBase64DecodingOptions.IgnoreUnknownCharacters)
-            let decodedImage = UIImage(data:imageData!)
-            return decodedImage
-        }
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         //showSignature(self.items[indexPath.row].signature)

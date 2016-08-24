@@ -12,34 +12,14 @@ import Firebase
 class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet var tableView: UITableView!
-    var items: [Menu] = []
+        
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let firebase_users = Firebase(url:"https://coffeeforchange.firebaseio.com/menu")
-        configureData(firebase_users)
         tableView.delegate = self
         tableView.dataSource = self
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "menuCell")
-    }
-    func configureData(firebase: Firebase) {
-        // Attach a closure to read the data at our posts reference
-        firebase.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            let enumerator = snapshot.children
-            while let rest = enumerator.nextObject() as? FDataSnapshot {
-                let secondEnum = rest.children
-                while let nextLevel = secondEnum.nextObject() as? FDataSnapshot{
-                    let tempItem: Menu = Menu(price: ((nextLevel.value["price"] as! NSNumber).doubleValue as Double?)!, name: nextLevel.value["name"] as! String, id: nextLevel.value["id"] as! String)
-                    self.items.append(tempItem)
-                    self.tableView.reloadData()
-                }
-            }
-            
-            }, withCancelBlock: { error in
-                print(error.description)
-        })
-        
     }
 
     override func didReceiveMemoryWarning() {

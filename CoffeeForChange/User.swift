@@ -9,31 +9,29 @@
 import Foundation
 
 
-class User {
-    var id: String?
-    var first_name: String?
-    var user_id: String?
-    var last_name: String?
-    var full_name: String?
-    var money: Double?
-    var total_money: Double?
-    var year: Int?
-    var previous_orders: [String?]
-
-    init(id: String?, first_name: String?, last_name: String?, money: Double?, year: Int?){
-        self.id = id!
-        self.first_name = first_name!
-        self.last_name = last_name!
-        self.full_name = "\(self.first_name) \(self.last_name)"
-        self.money = money!
-        self.year = year!
-        self.previous_orders=[String?]()
+struct User: FirebaseItem {
+    var id: String
+    var name: String
+    var user_id: String
+    var last_name: String
+    var full_name: String {
+        get {
+            return("\(name) \(last_name)")
+        }
     }
-    init(){
-        self.previous_orders=[String?]()
+    var money: Double
+    var total_money: Double
+    var year: Int
+    var previous_orders: [String] = []
+    func toJSON() -> [String : AnyObject] {
+        return [
+            "first":self.name,
+            "id":self.id,
+            "last":self.last_name,
+            "money_left":self.money,
+            "total_money":self.total_money,
+            "user_id":self.user_id,
+            "year":self.year
+        ]
     }
-    func print_info(){
-        print("\(id) \(full_name) \(money) \(year)")
-    }
-
 }
